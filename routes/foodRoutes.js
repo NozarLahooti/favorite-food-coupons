@@ -1,15 +1,38 @@
 const express = require('express');
 const router = express.Router();
-const User = require('../models/user');
+const Food = require('../models/food');  
+
 
 router.get('/', async (req, res) => {
-  const users = await User.find().populate('favoriteCoupons');
-  res.json(users);
+  try {
+    const foods = await Food.find();
+    res.json(foods);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
 });
+
 
 router.get('/:id', async (req, res) => {
-  const user = await User.findById(req.params.id).populate('favoriteCoupons');
-  res.json(user);
+  try {
+    const food = await Food.findById(req.params.id);
+    res.json(food);
+  } catch (err) {
+    res.status(404).json({ error: 'Food not found' });
+  }
 });
 
-module.exports = router;
+
+router.post('/', async (req, res) => {
+  try {
+    const newFood = await Food.create({
+      name: req.body.name,
+      category: req.body.category    
+    });
+    res.status(201).json(newFood);
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
+});
+
+module.exports = router;  
