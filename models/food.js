@@ -5,3 +5,4 @@ const foodSch = new mongoose.Schema({
     category: {type : String}
 });
 
+module.exports = mongoose.model('Food', foodSch)
