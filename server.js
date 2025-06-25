@@ -1,13 +1,23 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
+const path = require('path');
+
 require('dotenv').config();
 
 
 dotenv.config();
 const app = express();
 
+app.use(express.static(path.join(__dirname, 'public')));
+
 // Middleware to parse JSON
+
+
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'index.html'))
+})
+
 app.use(express.json());
 
 // Connect to MongoDB
@@ -28,9 +38,9 @@ app.use('/api/foods', foodRoutes);
 app.use('/api/coupons', couponRoutes);
 
 // Default home route
-app.get('/', (req, res) => {
-  res.send('Food Favorites API is running...');
-});
+// app.get('/', (req, res) => {
+//   res.send('Food Favorites API is running...');
+// });
 
 // Start server
 const PORT = process.env.PORT || 3000;
