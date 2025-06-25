@@ -25,4 +25,19 @@ router.post('/', async (req, res) => {
   }
 });
 
+// PATCH update a user by ID
+router.patch('/:id', async (req, res) => {
+  try {
+    const updated = await User.findByIdAndUpdate(
+      req.params.id,
+      { $set: req.body },
+      { new: true, runValidators: true }
+    ).populate('favoriteCoupons');
+    if (!updated) return res.status(404).json({ error: 'User not found' });
+    res.json(updated);
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
+});
+
 module.exports = router;
